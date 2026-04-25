@@ -85,5 +85,20 @@ def list_configs():
         else:
             typer.echo(name)
 
+@app.command()
+def cat(name: str = typer.Argument(..., autocompletion=config_completions)):
+    """Prints the contents of a config"""
+    if not check_config():
+        return
+    
+    path = config.get_config(name)
+    if path is None:
+        typer.echo(f"Config {name} not found")
+        return
+
+    with open(path, "r") as f:
+        typer.echo(f.read())
+
+
 def main():
     app()

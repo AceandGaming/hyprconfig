@@ -87,6 +87,10 @@ def list_configs() -> dict[str, bool]:
 
 def edit_config(name: str):
     config = get_config(name)
+    if not config:
+        if not name.endswith(".conf"):
+            name += ".conf"
+        config = CONFIG_DIR / name
 
     _edit(config)
     _update_config()
