@@ -1,0 +1,7 @@
+[project]
+name = "hyprconfig"
+version = "0.1.0"
+dependencies = ["typer"]
+
+[project.scripts]
+config = "hyprconfig.main:main"
