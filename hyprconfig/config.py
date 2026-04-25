@@ -41,7 +41,7 @@ def _update_config():
         for config in CONFIG_DIR.iterdir():
             if config.name.startswith("."): #disabled
                 continue
-            f.write(f"source ./{config.name}\n")
+            f.write(f"source = ./configs/{config.name}\n")
 
 def migrate_config():
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
