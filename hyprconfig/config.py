@@ -145,6 +145,7 @@ def import_config(path: Path):
         path = path.with_suffix(".conf")
 
     shutil.copy(path, CONFIG_DIR)
+    _update_config()
     return path
 
 def rename_config(name: str, newName: str):
