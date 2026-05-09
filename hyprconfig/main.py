@@ -135,7 +135,11 @@ def import_command(path: str):
     
 @app.command("reload")
 def reload():
-    """Reloads the hyprland config. (It's just an alias for hyprctl reload)"""
+    """Reloads the hyprland config"""
+    if not check_config():
+        return
+    config._update_config()
+
     subprocess.run(["hyprctl", "reload"])
 
 @app.command("rename")
