@@ -6,9 +6,8 @@ Hyprconfig (sorta tempary name) is a small little cli app that makes it easier t
 
 Run this:
 ```bash
-git clone https://github.com/AceandGaming/hyprconfig.git
-cd hyprconfig
-pip install .
+pip install git+https://github.com/AceandGaming/hyprconfig.git
 ```
 
-The cli is called `config`
+Then use `config` in the cli.
+Use `config --help` for more info!
