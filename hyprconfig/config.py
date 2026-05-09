@@ -50,8 +50,10 @@ def migrate_config():
         (CONFIG_DIR / "base.conf").touch()
         _update_config()
         return
+    
+    shutil.copy(HYPRLAND_CONFIG, CONFIG_DIR / "~old.conf")
 
-    with open(HYPRLAND_CONFIG, "r") as old, open(CONFIG_DIR / "base.conf", "w") as new:
+    with open(HYPRLAND_CONFIG, "r") as old, open(CONFIG_DIR / "base.conf", "a") as new:
         for line in old.readlines():
             if not line.startswith("source"):
                 new.write(line)
@@ -130,3 +132,26 @@ def get_config(name: str):
         return hidden_path
     
     return None
+
+def import_config(path: Path):
+
+    if not path.exists():
+        raise Exception(f"Config {path} does not exist")
+
+    if (CONFIG_DIR / path.name).exists():
+        raise Exception(f"Config {path.name} already exists")
+    
+    if not path.name.endswith(".conf"):
+        path = path.with_suffix(".conf")
+
+    shutil.copy(path, CONFIG_DIR)
+    return path
+
+def rename_config(name: str, newName: str):
+    config = get_config(name)
+    if not config:
+        return
+
+    newName = newName if newName.endswith(".conf") else f"{newName}.conf"
+    config.rename(CONFIG_DIR / newName)
+    _update_config()

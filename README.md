@@ -8,7 +8,7 @@ Run this:
 ```bash
 git clone https://github.com/AceandGaming/hyprconfig.git
 cd hyprconfig
-pip install -e .
+pip install .
 ```
 
 The cli is called `config`
