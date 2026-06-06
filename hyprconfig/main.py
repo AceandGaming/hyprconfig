@@ -2,6 +2,7 @@ from hyprconfig import config
 import typer
 from pathlib import Path
 import subprocess
+from typing import Optional
 
 app = typer.Typer()
 
@@ -155,6 +156,30 @@ def rename(name: str, new_name: str):
         return
 
     config.rename_config(name, new_name)
+
+@app.command("merge")
+def merge(
+    first: str = typer.Argument(..., autocompletion=config_completions),
+    second: str = typer.Argument(..., autocompletion=config_completions),
+    new_name: Optional[str] = typer.Argument(None),
+):
+    """Merges two configs into a new config"""
+    if new_name is None:
+        new_name = second
+    if not check_config():
+        return
+    if not config.get_config(first):
+        typer.echo(f"Config {first} not found")
+        return
+    if not config.get_config(second):
+        typer.echo(f"Config {second} not found")
+        return
+    if config.get_config(new_name):
+        typer.echo(f"Config {new_name} already exists")
+        return
+
+    final_path = config.merge_configs(first, second, new_name)
+    typer.echo(f"Merged configs as {final_path.name.removesuffix('.conf')}")
 
 def main():
     app()

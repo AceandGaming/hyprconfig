@@ -148,6 +148,34 @@ def import_config(path: Path):
     _update_config()
     return path
 
+def merge_configs(first_name: str, second_name: str, newName: str):
+    first_config = get_config(first_name)
+    if not first_config:
+        raise Exception(f"Config {first_name} does not exist")
+
+    second_config = get_config(second_name)
+    if not second_config:
+        raise Exception(f"Config {second_name} does not exist")
+
+    newName = newName if newName.endswith(".conf") else f"{newName}.conf"
+    new_path = CONFIG_DIR / newName
+    if new_path.exists() or (CONFIG_DIR / f".{newName}").exists():
+        raise Exception(f"Config {newName} already exists")
+
+    with open(new_path, "w") as merged:
+        for index, source in enumerate([first_config, second_config]):
+            if index > 0:
+                merged.write("\n")
+            merged.write(f"# Merged from {source.name.removeprefix('.')}\n")
+            with open(source, "r") as source_file:
+                contents = source_file.read()
+                merged.write(contents)
+                if contents and not contents.endswith("\n"):
+                    merged.write("\n")
+
+    _update_config()
+    return new_path
+
 def rename_config(name: str, newName: str):
     config = get_config(name)
     if not config:
